@@ -8,6 +8,11 @@ Requirements
 
 * [jQuery 1.2.3+](http://jquery.com/)
 
+Example
+-------
+![jquery-ktest example](http://img4.hostingpics.net/pics/773001jqueryktest.png "jquery-ktest")
+
+
 Installation
 ------------
 
