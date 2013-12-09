@@ -1,15 +1,15 @@
 jquery-ktest
 ============
 
-jquery-ktest is **a simple yet customizable client-side knowledge tests maker** based on jQuery. It allows jQuery users to quickly pusblish knowledge tests (quiz, questionnaire) for end-users.
+jquery-ktest is **a simple yet customizable client-side knowledge tests maker** based on jQuery. It allows jQuery users to quickly pusblish knowledge tests (quiz, questionnaires...) for end-users.
 
 Requirements
 ------------
 
 * jQuery 1.2.3+
 
-How to use
-----------
+Installation
+------------
 
 1. Download jquery-ktest and make it accessible in your assets directory.
 
@@ -61,7 +61,8 @@ How to use
 
 Settings
 --------
-A few optional settings are available.
+
+A couple of optional settings are available.
 
 ###Content customization
 
