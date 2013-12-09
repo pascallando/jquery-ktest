@@ -15,49 +15,49 @@ How to use
 
 2. Include jQuery and jquery-ktest in your page (preferably at the end, just before `</body>`):
 
-```html
-<script src="jquery.js"></script>
-<script src="jquery-ktest.js"></script>
-```
+	```html
+	<script src="jquery.js"></script>
+	<script src="jquery-ktest.js"></script>
+	```
 
 3. jquery-ktest default language is **English**. If needed, you can also include a language pack in order to get your content translated:
 
-```html
-<script src="jquery-ktest/lang/fr.js"></script>
-```
+	```html
+	<script src="jquery-ktest/lang/fr.js"></script>
+	```
 
 4. Create your first knowledge test. jquery-ktest tests declaration are just simple HTML content: `.ktest` div containing `.question` divs.
 
-```html
-<div class="ktest" data-difficulty="3" data-time="5">
-    <div class="question">
-        <div class="statement">What notes a G major chord is made of?</div>
-        <ul class="answers">
-            <li>A B C</li>
-            <li data-correct="true">G B D</li>
-            <li>F E A</li>
-        </ul>
-    </div>
-    <div class="question">
-        <div class="statement">Who is or has been a guitar player part of the Rolling Stones band?</div>
-        <ul class="answers">
-            <li data-correct="true">Mick Taylor</li>
-            <li>Django Reinhardt</li>
-            <li data-correct="true">Keith Richards</li>
-            <li>Charlie Watts</li>
-            <li>Mike Mills</li>
-        </ul>
-    </div>
-</div>
-```
+	```html
+	<div class="ktest" data-difficulty="3" data-time="5">
+	    <div class="question">
+	        <div class="statement">What notes a G major chord is made of?</div>
+	        <ul class="answers">
+	            <li>A B C</li>
+	            <li data-correct="true">G B D</li>
+	            <li>F E A</li>
+	        </ul>
+	    </div>
+	    <div class="question">
+	        <div class="statement">Who is or has been a guitar player part of the Rolling Stones band?</div>
+	        <ul class="answers">
+	            <li data-correct="true">Mick Taylor</li>
+	            <li>Django Reinhardt</li>
+	            <li data-correct="true">Keith Richards</li>
+	            <li>Charlie Watts</li>
+	            <li>Mike Mills</li>
+	        </ul>
+	    </div>
+	</div>
+	```
 
 5. Ktestify your content:
 
-```javascript
-$(function () {
-	$('.ktest').ktest();
-});
-```
+	```javascript
+	$(function () {
+		$('.ktest').ktest();
+	});
+	```
 
 Settings
 --------
@@ -67,15 +67,19 @@ A few optional settings are available.
 
 The test description is displayed on top of the test welcome block. Just add a `.description` div in your ktest declaration:
 
-		<div class="ktest" data-difficulty="1" data-time="10">
-			<div class="description">
-				<p>This test will allow you to check your guitaristic knowledge!</p>
-			</div>
-			...
-		</div>
+```html
+<div class="ktest" data-difficulty="1" data-time="10">
+	<div class="description">
+		<p>This test will allow you to check your guitaristic knowledge!</p>
+	</div>
+	...
+</div>
+```
 
 ###Plugin options
+
 Options can be passed to the plugin using a dictionnary:
+
 ```javascript
 $('.ktest').ktest({
 	option_1: 'value',
