@@ -104,7 +104,7 @@
     			answer_content = $answer.html(),
     			answer_value = $answer.data('correct') === true ? true : false;
 
-    		$question_form.append('<label><input data-correct="'+ answer_value +'" class="answer" type="checkbox" /> ' + answer_content + '</label>');
+    		$question_form.append('<div><label><input data-correct="'+ answer_value +'" class="answer" type="checkbox" /> ' + answer_content + '</label></div>');
     	});
 
     	$question.append('<a data-action="ktest-validate-answer" href="#" class="btn btn-primary">'+ uc_first($.fn.ktest.labels.validate) +'</a>')
