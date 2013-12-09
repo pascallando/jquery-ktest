@@ -90,14 +90,14 @@
     	var $ktest_container = $question.closest('.ktest'),
     		$question_ul = $question.find('ul.answers'),
     		$answers = $question_ul.find('li'),
-    		$all_questions = $question.closest('.ktest').find('.question');
+    		$all_questions = $question.closest('.ktest').find('.question'),
+    		$question_form = $('<form />');
 
     	$all_questions.hide();
 		$question.prepend('<div class="question-number">Question ' + $question.data('index') + '/' + $ktest_container.data('nbr-questions') + '</div>');
-    	$question.addClass('well');
     	$question_ul.hide();
-    	$question.append('<form />');
-    	var $question_form = $question.find('form');
+    	$question.append($question_form);
+    	$question.addClass('well');
 
     	$.each($answers, function(index, answer) {
     		var $answer = $(answer),
@@ -176,15 +176,13 @@
 	var show_report = function ($ktest_container, result) {
 		var $questions = $ktest_container.find('.question'),
 			rate_20 = Math.round(100*result.nbr_correct_answers*20/result.nbr_questions)/100,
-			duration_minutes = result.test_duration/1000/60;
+			duration_minutes = result.test_duration/1000/60,
+			$report = $('<div class="well report">\
+				<p>'+ uc_first($.fn.ktest.labels.test_is_finished) + ' ' + (duration_minutes>1.1 ? Math.round(duration_minutes) : $.fn.ktest.labels.less_than_a) + ' ' + $.fn.ktest.labels.minute + (Math.round(duration_minutes)>=2 ? 's' : '') + '.</p>\
+				<p>'+ uc_first($.fn.ktest.labels.you_correctly_answered) + ' ' + result.nbr_correct_answers + ' ' + $.fn.ktest.labels.question + (result.nbr_correct_answers>1 ? 's' : '') + ' ' + $.fn.ktest.labels.on  + ' ' + result.nbr_questions +' ('+ $.fn.ktest.labels.something_like + ' <strong>' + rate_20 + '/20</strong>).</p>\
+			</div>');
 
 		$questions.hide();
-		$ktest_container.append('<div class="well report">\
-			<p>'+ uc_first($.fn.ktest.labels.test_is_finished) + ' ' + (duration_minutes>1.1 ? Math.round(duration_minutes) : $.fn.ktest.labels.less_than_a) + ' ' + $.fn.ktest.labels.minute + (Math.round(duration_minutes)>=2 ? 's' : '') + '.</p>\
-			<p>'+ uc_first($.fn.ktest.labels.you_correctly_answered) + ' ' + result.nbr_correct_answers + ' ' + $.fn.ktest.labels.question + (result.nbr_correct_answers>1 ? 's' : '') + ' ' + $.fn.ktest.labels.on  + ' ' + result.nbr_questions +' ('+ $.fn.ktest.labels.something_like + ' <strong>' + rate_20 + '/20</strong>).</p>\
-		</div>');
-
-		var $report = $ktest_container.find('.report');
 
 		if (rate_20 < 10) {
 			$report.append('<div class="alert alert-danger">'+ $.fn.ktest.labels.html_failed_comment +'</div>')
@@ -199,6 +197,8 @@
 		$report.append('<div>\
 			<a data-action="ktest-show-all-answers" href="#" class="btn btn-default">'+ uc_first($.fn.ktest.labels.review_all) +'</a>\
 		</div>');
+
+		$ktest_container.append($report);
 	}
 
 	/**
@@ -232,21 +232,28 @@
 
 		this.each(function() {
 		   	var $ktest_container = $(this),
-				estimated_time = $ktest_container.data('time'),
-				difficulty = $ktest_container.data('difficulty'),
+				difficulty = typeof $ktest_container.data('difficulty') != 'undefined' ? $ktest_container.data('difficulty') : null,
+				estimated_time = typeof $ktest_container.data('time') != 'undefined' ? $ktest_container.data('time') : null,
 				$questions = $ktest_container.find('.question'),
-				nbr_questions = $questions.length;
+				nbr_questions = $questions.length,
+				$notice = $('<div class="well notice"><p>'+ uc_first($.fn.ktest.labels.nbr_questions) + ' : <strong>'+ nbr_questions +'</strong></p></div>');
 
 	    	$questions.hide();
 	    	$ktest_container.find('.infos').hide();
 	    	$ktest_container.data('nbr-questions', nbr_questions);
 	    	$ktest_container.data('nbr-correct-answers', 0);
-	    	$ktest_container.append('<div class="well notice">\
-	    		<p>'+ uc_first($.fn.ktest.labels.nbr_questions) + ' : <strong>'+ nbr_questions +'</strong></p>\
-	    		<p>'+ uc_first($.fn.ktest.labels.difficulty) + ' : '+ (difficulty == 1 ? '<span class="label label-success">'+ uc_first($.fn.ktest.labels.simple) +'</span>' : difficulty == 2 ? '<span class="label label-warning">'+ uc_first($.fn.ktest.labels.medium) +'</span>' : difficulty == 3 ? '<span class="label label-danger">'+ uc_first($.fn.ktest.labels.hard) +'</span>' : '') + '</p>\
-	    		<p>'+ uc_first($.fn.ktest.labels.estimated_time) + ' : <strong>'+ estimated_time + ' ' + $.fn.ktest.labels.minute + (estimated_time > 1 ? 's' : '') + '</strong></p>\
-	    	</div>');
-	    	$ktest_container.find('.description').prependTo($ktest_container.find('.notice'));
+
+	    	$ktest_container.append($notice);
+
+	    	if (difficulty) {
+	    		$notice.append('<p>'+ uc_first($.fn.ktest.labels.difficulty) + ' : '+ (difficulty == 1 ? '<span class="label label-success">'+ uc_first($.fn.ktest.labels.simple) +'</span>' : difficulty == 2 ? '<span class="label label-warning">'+ uc_first($.fn.ktest.labels.medium) +'</span>' : difficulty == 3 ? '<span class="label label-danger">'+ uc_first($.fn.ktest.labels.hard) +'</span>' : '') + '</p>');
+	    	};
+
+	    	if (estimated_time) {
+	    		$notice.append('<p>'+ uc_first($.fn.ktest.labels.estimated_time) + ' : <strong>'+ estimated_time + ' ' + $.fn.ktest.labels.minute + (estimated_time > 1 ? 's' : '') + '</strong></p>');
+	    	};
+
+	    	$ktest_container.find('.description').prependTo($notice);
 
 	    	$ktest_container.append('<a data-action="ktest-start-test" href="#" class="btn btn-primary">'+ uc_first($.fn.ktest.labels.start_test) +'</a>');
     	});
