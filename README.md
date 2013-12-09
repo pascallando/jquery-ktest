@@ -29,7 +29,7 @@ How to use
 4. Create your first knowledge test. jquery-ktest tests declaration are just simple HTML content: `.ktest` div containing `.question` divs.
 
 	```html
-	<div class="ktest" data-difficulty="3" data-time="5">
+	<div class="ktest">
 	    <div class="question">
 	        <div class="statement">What notes a G major chord is made of?</div>
 	        <ul class="answers">
@@ -63,16 +63,51 @@ Settings
 --------
 A few optional settings are available.
 
-###Test description
+###Content customization
+
+####Test difficulty
+
+The test difficulty is a [1..3] number. It will be displayed on the test welcome screen. Just add a `data-difficulty` attribute to your ktest div:
+
+```html
+<div class="ktest" data-difficulty="2">
+	...
+</div>
+```
+
+####Test estimated time
+
+The test estimated time is an integer number, representing a time in minutes. It will be displayed on the test welcome screen. Just add a `data-time` attribute to your ktest div:
+
+```html
+<div class="ktest" data-time="10">
+	...
+</div>
+```
+
+####Test description
 
 The test description is displayed on top of the test welcome block. Just add a `.description` div in your ktest declaration:
 
 ```html
-<div class="ktest" data-difficulty="1" data-time="10">
+<div class="ktest">
 	<div class="description">
 		<p>This test will allow you to check your guitaristic knowledge!</p>
 	</div>
 	...
+</div>
+```
+
+####Question hints
+
+For each question defined in a test, you can specify a hint text, which will be shown after the user validated his answer. Just add a `.info` div to your question definition:
+
+```html
+<div class="question">
+	...
+	<div class="infos">
+		<p>Here are some explanation on this subject...</p>
+	</div>
 </div>
 ```
 
