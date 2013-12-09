@@ -85,6 +85,7 @@
 	 * @author Pascal Lando
 	 */
     var ask_question = function ($question) {
+
     	var $question_ul = $question.find('ul.answers'),
     		$answers = $question_ul.find('li'),
     		$all_questions = $question.closest('.ktest').find('.question');
@@ -237,7 +238,10 @@
     	$ktest_container.append('<a data-action="ktest-start-test" href="#" class="btn btn-primary">'+ uc_first($.fn.ktest.labels.start_test) +'</a>');
 
 	    $(document).on('click', '.ktest a[data-action="ktest-start-test"]', function () {
-	    	$(this).hide();
+	    	var $btn = $(this),
+	    		$ktest_container = $(this).closest('.ktest');
+
+	    	$btn.hide();
 	    	start_test($ktest_container);
 	    	begin_time = new Date();
 			return false;
@@ -256,7 +260,8 @@
 		});
 
 	    $(document).on('click', '.ktest a[data-action="ktest-continue-test"]', function () {
-	    	var $question = $(this).closest('.question'),
+	    	var $ktest_container = $(this).closest('.ktest'),
+	    		$question = $(this).closest('.question'),
 	    		$next_question = $($question.data('next-question'));
 
 	    	if ($next_question.length) {
@@ -273,6 +278,7 @@
 		});
 
 	    $(document).on('click', '.ktest a[data-action="ktest-show-all-answers"]', function () {
+	    	var $ktest_container = $(this).closest('.ktest');
 			show_all_answers($ktest_container);
 			return false;
 		});
