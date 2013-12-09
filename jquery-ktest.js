@@ -147,9 +147,9 @@
 		$validation_btn.hide();
 
 		if (nbr_mistakes > 0) {
-			$question.append('<p class="alert alert-danger"> ' + uc_first($.fn.ktest.labels.you_made) + ' ' + nbr_mistakes + ' ' + $.fn.ktest.labels.mistake + (nbr_mistakes > 1 ? 's': '') +' !</p>');
+			$question.append('<p class="alert alert-danger">' + uc_first($.fn.ktest.labels.you_made) + ' ' + nbr_mistakes + ' ' + $.fn.ktest.labels.mistake + (nbr_mistakes > 1 ? 's': '') + ' !</p>');
 		} else {
-			$question.append('<p class="alert alert-success">'+ uc_first($.fn.ktest.labels.correct_answer) +' !</p>');
+			$question.append('<p class="alert alert-success">' + uc_first($.fn.ktest.labels.correct_answer) + ' !</p>');
 			$ktest_container.data('nbr-correct-answers', nbr_correct_answers_before+1);
 		}
 

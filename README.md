@@ -6,7 +6,7 @@ jquery-ktest is **a simple yet customizable client-side knowledge tests maker** 
 Requirements
 ------------
 
-* jQuery 1.2.3+
+* [jQuery 1.2.3+](http://jquery.com/)
 
 Installation
 ------------
@@ -68,7 +68,7 @@ A couple of optional settings are available.
 
 ####Test difficulty
 
-The test difficulty is a [1..3] number. It will be displayed on the test welcome screen. Just add a `data-difficulty` attribute to your ktest div:
+The test difficulty is a [1..3] number. It will be displayed on the test welcome screen as *Simple*/*Medium*/*Hard*. Just add a `data-difficulty` attribute to your ktest div:
 
 ```html
 <div class="ktest" data-difficulty="2">
@@ -130,3 +130,9 @@ The available options are listed in the table bellow:
 | ------------- |----------------|----------------|----------|
 | `push_ga_events` | boolean | false | When set to true, jquery-ktest will push an event to Google Analytics each time a user validates an answer. Of course, GA should be paramed on your page, so that the `_gaq` object is available. Generated code for the event: `_gaq.push(['_trackEvent', 'jquery-ktest', <QUESTION>, <NUMBER OF MISTAKES THE USER DID>])` |
 
+Miscellaneous
+-------------
+
+### Bootstrap integration
+
+Even if [Bootstrap](http://getbootstrap.com/) front-end framework is not required to run jquery-ktest, it integrates well with it. If you use Bootstrap on your pages, your tests should look quite sweet without writing extra CSS.
