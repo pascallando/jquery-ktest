@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>jquery-ktest unit tests</title>
+		<link rel="stylesheet" href="qunit-1.12.0.css">
+		<meta charset="utf-8">
+	</head>
+	<body>
+		<div id="qunit"></div>
+		<div id="qunit-fixture"></div>
+
+		<div id="container">
+			<div id="test-1" class="ktest" data-difficulty="3" data-time="5">
+			    <div class="question">
+			        <div class="statement">What notes a G major chord is made of?</div>
+			        <ul class="answers">
+			            <li>A B C</li>
+			            <li data-correct="true">G B D</li>
+			            <li>F E A</li>
+			        </ul>
+			    </div>
+
+			    <div class="question">
+			        <div class="statement">Who is or has been a guitar player part of the Rolling Stones band?</div>
+			        <ul class="answers">
+			            <li data-correct="true">Mick Taylor</li>
+			            <li>Django Reinhardt</li>
+			            <li data-correct="true">Keith Richards</li>
+			            <li>Charlie Watts</li>
+			            <li>Mike Mills</li>
+			        </ul>
+			    </div>
+			</div>
+
+			<div id="test-2" class="ktest" data-difficulty="1" data-time="50">
+			    <div class="description">
+			        <p>Welcome to this test!</p>
+			    </div>
+
+			    <div class="question">
+			        <div class="statement">Ça va ?</div>
+			        <ul class="answers">
+			            <li data-correct="true">Oui</li>
+			            <li>Non</li>
+			        </ul>
+			        <div class="infos">
+			            <p>A few things to be displayed once the user has validated his answer.</p>
+			        </div>
+			    </div>
+			</div>
+		</div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="../jquery-ktest.js"></script>
+		<script src="qunit-1.12.0.js"></script>
+		<script src="jquery-ktest_tests.js"></script>
+	</body>
+</html>

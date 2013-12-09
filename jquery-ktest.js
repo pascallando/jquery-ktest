@@ -61,7 +61,8 @@
 	 */
 	var start_test = function ($ktest_container) {
 		var $questions = $ktest_container.find('.question'),
-			nbr_questions = $questions.length;
+			nbr_questions = $questions.length,
+			begin_time = new Date();
 
     	$ktest_container.find('.notice').hide();
     	$questions.hide();
@@ -74,6 +75,7 @@
     		};
     	});
 
+    	$ktest_container.data('begin-time', begin_time);
 		ask_question($($questions[0]));
 	}
 
@@ -114,15 +116,16 @@
 	/**
 	 * Displays correction for a specific question.
 	 * @param {jQuery} $question The question to show correction
-	 * @param {function} callback A callback function to be fired when finished
 	 * @private
 	 * @author Pascal Lando
 	 */
-	var show_correction = function ($question, callback) {
-		var $answers = $question.find('form').find('.answer'),
+	var show_correction = function ($question) {
+		var $ktest_container = $question.closest('.ktest'),
+			$answers = $question.find('form').find('.answer'),
 			$infos = $question.find('.infos'),
 			$validation_btn = $question.find('a[data-action="ktest-validate-answer"]'),
-			nbr_mistakes = 0;
+			nbr_mistakes = 0,
+			nbr_correct_answers_before = $ktest_container.data('nbr-correct-answers');
 
 
 		$.each($answers, function(index, answer) {
@@ -146,6 +149,7 @@
 			$question.append('<p class="alert alert-danger"> ' + uc_first($.fn.ktest.labels.you_made) + ' ' + nbr_mistakes + ' ' + $.fn.ktest.labels.mistake + (nbr_mistakes > 1 ? 's': '') +' !</p>');
 		} else {
 			$question.append('<p class="alert alert-success">'+ uc_first($.fn.ktest.labels.correct_answer) +' !</p>');
+			$ktest_container.data('nbr-correct-answers', nbr_correct_answers_before+1);
 		}
 
 		if ($infos.length) {
@@ -155,10 +159,6 @@
 		};
 
     	$question.append('<a data-action="ktest-continue-test" class="btn btn-primary" href="#">'+ uc_first($.fn.ktest.labels.continue_next) +'…</a>');
-
-		if (typeof callback != 'undefined') {
-			callback(nbr_mistakes);
-		};
 	}
 
 	/**
@@ -170,13 +170,13 @@
 	 */
 	var show_report = function ($ktest_container, result) {
 		var $questions = $ktest_container.find('.question'),
-			rate_20 = result.nbr_correct_answers*20/result.nbr_questions,
+			rate_20 = Math.round(100*result.nbr_correct_answers*20/result.nbr_questions)/100,
 			duration_minutes = result.test_duration/1000/60;
 
 		$questions.hide();
 		$ktest_container.append('<div class="well report">\
-			<p>'+ uc_first($.fn.ktest.labels.test_is_finished) + ' ' + (duration_minutes>1.1 ? Math.round(duration_minutes) : $.fn.ktest.labels.less_than_a) + ' ' + $.fn.ktest.labels.minute + (duration_minutes>=2 ? 's' : '') + ' !</p>\
-			<p>'+ uc_first($.fn.ktest.labels.you_correctly_answered) + ' ' + result.nbr_correct_answers + ' ' + $.fn.ktest.labels.question + ' ' + (result.nbr_correct_answers>1 ? 's' : '') + ' ' + $.fn.ktest.labels.on  + ' ' + result.nbr_questions +' ('+ $.fn.ktest.labels.something_like + ' <strong>' + rate_20 + '/20</strong> !).</p>\
+			<p>'+ uc_first($.fn.ktest.labels.test_is_finished) + ' ' + (duration_minutes>1.1 ? Math.round(duration_minutes) : $.fn.ktest.labels.less_than_a) + ' ' + $.fn.ktest.labels.minute + (Math.round(duration_minutes)>=2 ? 's' : '') + '.</p>\
+			<p>'+ uc_first($.fn.ktest.labels.you_correctly_answered) + ' ' + result.nbr_correct_answers + ' ' + $.fn.ktest.labels.question + (result.nbr_correct_answers>1 ? 's' : '') + ' ' + $.fn.ktest.labels.on  + ' ' + result.nbr_questions +' ('+ $.fn.ktest.labels.something_like + ' <strong>' + rate_20 + '/20</strong>).</p>\
 		</div>');
 
 		var $report = $ktest_container.find('.report');
@@ -218,59 +218,56 @@
 	 */
     $.fn.ktest = function() {
 
-    	var $ktest_container = $(this),
-    		estimated_time = $ktest_container.data('time'),
-    		difficulty = $ktest_container.data('difficulty'),
-    		$questions = $ktest_container.find('.question'),
-    		nbr_questions = $questions.length,
-    		nbr_correct_answers = 0,
-    		begin_time;
-
     	check_lang_pack();
 
-    	$questions.hide();
-    	$ktest_container.find('.infos').hide();
-    	$ktest_container.append('<div class="well notice">\
-    		<p>'+ uc_first($.fn.ktest.labels.nbr_questions) + ' : <strong>'+ nbr_questions +'</strong></p>\
-    		<p>'+ uc_first($.fn.ktest.labels.difficulty) + ' : '+ (difficulty == 1 ? '<span class="label label-success">'+ uc_first($.fn.ktest.labels.simple) +'</span>' : difficulty == 2 ? '<span class="label label-warning">'+ uc_first($.fn.ktest.labels.medium) +'</span>' : difficulty == 3 ? '<span class="label label-danger">'+ uc_first($.fn.ktest.labels.hard) +'</span>' : '') + '</p>\
-    		<p>'+ uc_first($.fn.ktest.labels.estimated_time) + ' : <strong>'+ estimated_time + ' ' + $.fn.ktest.labels.minute + (estimated_time > 1 ? 's' : '') + '</strong></p>\
-    	</div>');
-    	$ktest_container.append('<a data-action="ktest-start-test" href="#" class="btn btn-primary">'+ uc_first($.fn.ktest.labels.start_test) +'</a>');
+		this.each(function() {
+		   	var $ktest_container = $(this),
+				estimated_time = $ktest_container.data('time'),
+				difficulty = $ktest_container.data('difficulty'),
+				$questions = $ktest_container.find('.question'),
+				nbr_questions = $questions.length;
+
+	    	$questions.hide();
+	    	$ktest_container.find('.infos').hide();
+	    	$ktest_container.data('nbr-questions', nbr_questions);
+	    	$ktest_container.data('nbr-correct-answers', 0);
+	    	$ktest_container.append('<div class="well notice">\
+	    		<p>'+ uc_first($.fn.ktest.labels.nbr_questions) + ' : <strong>'+ nbr_questions +'</strong></p>\
+	    		<p>'+ uc_first($.fn.ktest.labels.difficulty) + ' : '+ (difficulty == 1 ? '<span class="label label-success">'+ uc_first($.fn.ktest.labels.simple) +'</span>' : difficulty == 2 ? '<span class="label label-warning">'+ uc_first($.fn.ktest.labels.medium) +'</span>' : difficulty == 3 ? '<span class="label label-danger">'+ uc_first($.fn.ktest.labels.hard) +'</span>' : '') + '</p>\
+	    		<p>'+ uc_first($.fn.ktest.labels.estimated_time) + ' : <strong>'+ estimated_time + ' ' + $.fn.ktest.labels.minute + (estimated_time > 1 ? 's' : '') + '</strong></p>\
+	    	</div>');
+	    	$ktest_container.append('<a data-action="ktest-start-test" href="#" class="btn btn-primary">'+ uc_first($.fn.ktest.labels.start_test) +'</a>');
+    	});
+
 
 	    $(document).on('click', '.ktest a[data-action="ktest-start-test"]', function () {
-	    	var $btn = $(this),
-	    		$ktest_container = $(this).closest('.ktest');
+			var $btn = $(this),
+				$ktest_container = $(this).closest('.ktest');
 
 	    	$btn.hide();
 	    	start_test($ktest_container);
-	    	begin_time = new Date();
 			return false;
 		});
 
 	    $(document).on('click', '.ktest a[data-action="ktest-validate-answer"]', function () {
-	    	var $question = $(this).closest('.question');
+			var $question = $(this).closest('.question');
 
-			show_correction($question, function (nbr_mistakes) {
-				if (nbr_mistakes == 0) {
-					nbr_correct_answers++;
-				};
-			});
-
+			show_correction($question);
 			return false;
 		});
 
 	    $(document).on('click', '.ktest a[data-action="ktest-continue-test"]', function () {
 	    	var $ktest_container = $(this).closest('.ktest'),
-	    		$question = $(this).closest('.question'),
-	    		$next_question = $($question.data('next-question'));
+				$question = $(this).closest('.question'),
+				$next_question = $($question.data('next-question'));
 
 	    	if ($next_question.length) {
 		    	ask_question($next_question);
 	    	} else {
 	    		var data = {
-	    			nbr_questions: nbr_questions,
-	    			nbr_correct_answers: nbr_correct_answers,
-	    			test_duration: new Date(new Date() - begin_time)
+	    			nbr_questions: $ktest_container.data('nbr-questions'),
+	    			nbr_correct_answers: $ktest_container.data('nbr-correct-answers'),
+	    			test_duration: new Date(new Date() - $ktest_container.data('begin-time'))
 	    		}
 	    		show_report($ktest_container, data);
 	    	}
@@ -279,8 +276,11 @@
 
 	    $(document).on('click', '.ktest a[data-action="ktest-show-all-answers"]', function () {
 	    	var $ktest_container = $(this).closest('.ktest');
+
 			show_all_answers($ktest_container);
 			return false;
 		});
+
+
     };
 }( jQuery ));
