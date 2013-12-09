@@ -69,7 +69,7 @@
 
     	$.each($questions, function(index, question) {
     		var $question = $(question)
-    		$question.find('.statement').append(' ('+ parseInt(index+1) +'/'+ nbr_questions +')')
+    		$question.data('index', parseInt(index+1));
     		if (index < nbr_questions-1) {
     			$question.data('next-question', $questions[index+1]);
     		};
@@ -87,13 +87,13 @@
 	 * @author Pascal Lando
 	 */
     var ask_question = function ($question) {
-
-    	var $question_ul = $question.find('ul.answers'),
+    	var $ktest_container = $question.closest('.ktest'),
+    		$question_ul = $question.find('ul.answers'),
     		$answers = $question_ul.find('li'),
     		$all_questions = $question.closest('.ktest').find('.question');
 
     	$all_questions.hide();
-
+		$question.prepend('<div class="question-number">Question ' + $question.data('index') + '/' + $ktest_container.data('nbr-questions') + '</div>');
     	$question.addClass('well');
     	$question_ul.hide();
     	$question.append('<form />');
@@ -116,10 +116,11 @@
 	/**
 	 * Displays correction for a specific question.
 	 * @param {jQuery} $question The question to show correction
+	 * @param {function} callback A callback function to be called at the end
 	 * @private
 	 * @author Pascal Lando
 	 */
-	var show_correction = function ($question) {
+	var show_correction = function ($question, callback) {
 		var $ktest_container = $question.closest('.ktest'),
 			$answers = $question.find('form').find('.answer'),
 			$infos = $question.find('.infos'),
@@ -159,6 +160,10 @@
 		};
 
     	$question.append('<a data-action="ktest-continue-test" class="btn btn-primary" href="#">'+ uc_first($.fn.ktest.labels.continue_next) +'…</a>');
+
+		if (typeof callback != 'undefined') {
+			callback(nbr_mistakes);
+		};
 	}
 
 	/**
@@ -216,7 +221,12 @@
 	 * The plugin main function.
 	 * @author Pascal Lando
 	 */
-    $.fn.ktest = function() {
+    $.fn.ktest = function(options) {
+
+		var default_options = {
+			push_ga_events : false
+		}
+		var settings = $.extend({}, default_options, options);
 
     	check_lang_pack();
 
@@ -236,6 +246,8 @@
 	    		<p>'+ uc_first($.fn.ktest.labels.difficulty) + ' : '+ (difficulty == 1 ? '<span class="label label-success">'+ uc_first($.fn.ktest.labels.simple) +'</span>' : difficulty == 2 ? '<span class="label label-warning">'+ uc_first($.fn.ktest.labels.medium) +'</span>' : difficulty == 3 ? '<span class="label label-danger">'+ uc_first($.fn.ktest.labels.hard) +'</span>' : '') + '</p>\
 	    		<p>'+ uc_first($.fn.ktest.labels.estimated_time) + ' : <strong>'+ estimated_time + ' ' + $.fn.ktest.labels.minute + (estimated_time > 1 ? 's' : '') + '</strong></p>\
 	    	</div>');
+	    	$ktest_container.find('.description').prependTo($ktest_container.find('.notice'));
+
 	    	$ktest_container.append('<a data-action="ktest-start-test" href="#" class="btn btn-primary">'+ uc_first($.fn.ktest.labels.start_test) +'</a>');
     	});
 
@@ -252,7 +264,17 @@
 	    $(document).on('click', '.ktest a[data-action="ktest-validate-answer"]', function () {
 			var $question = $(this).closest('.question');
 
-			show_correction($question);
+			show_correction($question, function (nbr_mistakes) {
+				if (settings.push_ga_events) {
+					var question_text = $question.find('.statement').text();
+					try {
+						_gaq.push(['_trackEvent', 'jquery-ktest', question_text, nbr_mistakes]);
+					}
+					catch (err) {
+						throw "Error when pushing Google Analytics event";
+					}
+				};
+			});
 			return false;
 		});
 
