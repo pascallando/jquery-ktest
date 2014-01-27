@@ -275,7 +275,7 @@
 				if (settings.push_ga_events) {
 					var question_text = $question.find('.statement').text();
 					try {
-						_gaq.push(['_trackEvent', 'jquery-ktest', question_text, nbr_mistakes]);
+						_gaq.push(['_trackEvent', 'jquery-ktest', question_text, nbr_mistakes.toString()]);
 					}
 					catch (err) {
 						throw "Error when pushing Google Analytics event";
