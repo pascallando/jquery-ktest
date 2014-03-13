@@ -122,7 +122,7 @@ For each question defined in a test, you can specify a hint text, which will be 
 Options can be passed to the plugin using a dictionnary:
 
 ```javascript
-$('.ktest').ktest({
+$('#my_test').ktest({
 	option_1: 'value',
 	option_2: 'other value',
 	...
