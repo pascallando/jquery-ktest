@@ -239,6 +239,7 @@
 				$notice = $('<div class="well notice"><p>'+ uc_first($.fn.ktest.labels.nbr_questions) + ' : <strong>'+ nbr_questions +'</strong></p></div>');
 
 	    	$questions.hide();
+	    	$ktest_container.addClass('ktest');
 	    	$ktest_container.find('.infos').hide();
 	    	$ktest_container.data('nbr-questions', nbr_questions);
 	    	$ktest_container.data('nbr-correct-answers', 0);
@@ -254,62 +255,61 @@
 	    	};
 
 	    	$ktest_container.find('.description').prependTo($notice);
-
 	    	$ktest_container.append('<a data-action="ktest-start-test" href="#" class="btn btn-primary">'+ uc_first($.fn.ktest.labels.start_test) +'</a>');
-    	});
 
 
-	    $(document).on('click', '.ktest a[data-action="ktest-start-test"]', function () {
-			var $btn = $(this),
-				$ktest_container = $(this).closest('.ktest');
+		    $ktest_container.on('click', 'a[data-action="ktest-start-test"]', function () {
+				var $btn = $(this),
+					$ktest_container = $(this).closest('.ktest');
 
-	    	$btn.hide();
-	    	start_test($ktest_container);
-			return false;
-		});
-
-	    $(document).on('click', '.ktest a[data-action="ktest-validate-answer"]', function () {
-			var $question = $(this).closest('.question');
-
-			show_correction($question, function (nbr_mistakes) {
-				if (settings.push_ga_events) {
-					var question_text = $question.find('.statement').text();
-					try {
-						_gaq.push(['_trackEvent', 'jquery-ktest', question_text, nbr_mistakes.toString()]);
-					}
-					catch (err) {
-						throw "Error when pushing Google Analytics event";
-					}
-				};
+		    	$btn.hide();
+		    	start_test($ktest_container);
+				return false;
 			});
-			return false;
-		});
 
-	    $(document).on('click', '.ktest a[data-action="ktest-continue-test"]', function () {
-	    	var $ktest_container = $(this).closest('.ktest'),
-				$question = $(this).closest('.question'),
-				$next_question = $($question.data('next-question'));
+		    $ktest_container.on('click', 'a[data-action="ktest-validate-answer"]', function () {
+				var $question = $(this).closest('.question');
 
-	    	if ($next_question.length) {
-		    	ask_question($next_question);
-	    	} else {
-	    		var data = {
-	    			nbr_questions: $ktest_container.data('nbr-questions'),
-	    			nbr_correct_answers: $ktest_container.data('nbr-correct-answers'),
-	    			test_duration: new Date(new Date() - $ktest_container.data('begin-time'))
-	    		}
-	    		show_report($ktest_container, data);
-	    	}
-			return false;
-		});
+				show_correction($question, function (nbr_mistakes) {
+					if (settings.push_ga_events) {
+						var question_text = $question.find('.statement').text();
+						try {
+							_gaq.push(['_trackEvent', 'jquery-ktest', question_text, nbr_mistakes.toString()]);
+						}
+						catch (err) {
+							throw "Error when pushing Google Analytics event";
+						}
+					};
+				});
+				return false;
+			});
 
-	    $(document).on('click', '.ktest a[data-action="ktest-show-all-answers"]', function () {
-	    	var $ktest_container = $(this).closest('.ktest');
+		    $ktest_container.on('click', 'a[data-action="ktest-continue-test"]', function () {
+		    	var $ktest_container = $(this).closest('.ktest'),
+					$question = $(this).closest('.question'),
+					$next_question = $($question.data('next-question'));
 
-			show_all_answers($ktest_container);
-			return false;
-		});
+		    	if ($next_question.length) {
+			    	ask_question($next_question);
+		    	} else {
+		    		var data = {
+		    			nbr_questions: $ktest_container.data('nbr-questions'),
+		    			nbr_correct_answers: $ktest_container.data('nbr-correct-answers'),
+		    			test_duration: new Date(new Date() - $ktest_container.data('begin-time'))
+		    		}
+		    		show_report($ktest_container, data);
+		    	}
+				return false;
+			});
 
+		    $ktest_container.on('click', 'a[data-action="ktest-show-all-answers"]', function () {
+		    	var $ktest_container = $(this).closest('.ktest');
+
+				show_all_answers($ktest_container);
+				return false;
+			});
+
+    	});
 
     };
 }( jQuery ));

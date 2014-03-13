@@ -31,10 +31,10 @@ Installation
 	<script src="jquery-ktest/lang/fr.js"></script>
 	```
 
-4. Create your first knowledge test. jquery-ktest tests declaration are just simple HTML content: `.ktest` div containing `.question` divs.
+4. Create your first knowledge test. jquery-ktest tests declaration are just simple HTML content: a div containing `.question` divs.
 
 	```html
-	<div class="ktest">
+	<div id="my_test">
 	    <div class="question">
 	        <div class="statement">What notes a G major chord is made of?</div>
 	        <ul class="answers">
@@ -60,7 +60,7 @@ Installation
 
 	```javascript
 	$(function () {
-		$('.ktest').ktest();
+		$('#my_test').ktest();
 	});
 	```
 
@@ -76,7 +76,7 @@ A couple of optional settings are available.
 The test difficulty is a [1..3] number. It will be displayed on the test welcome screen as *Simple*/*Medium*/*Hard*. Just add a `data-difficulty` attribute to your ktest div:
 
 ```html
-<div class="ktest" data-difficulty="2">
+<div id="my_test" data-difficulty="2">
 	...
 </div>
 ```
@@ -86,7 +86,7 @@ The test difficulty is a [1..3] number. It will be displayed on the test welcome
 The test estimated time is an integer number, representing a time in minutes. It will be displayed on the test welcome screen. Just add a `data-time` attribute to your ktest div:
 
 ```html
-<div class="ktest" data-time="10">
+<div id="my_test" data-time="10">
 	...
 </div>
 ```
@@ -96,7 +96,7 @@ The test estimated time is an integer number, representing a time in minutes. It
 The test description is displayed on top of the test welcome block. Just add a `.description` div in your ktest declaration:
 
 ```html
-<div class="ktest">
+<div id="my_test">
 	<div class="description">
 		<p>This test will allow you to check your guitaristic knowledge!</p>
 	</div>
