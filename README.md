@@ -106,7 +106,7 @@ The test description is displayed on top of the test welcome block. Just add a `
 
 ####Question hints
 
-For each question defined in a test, you can specify a hint text, which will be shown after the user validated his answer. Just add a `.info` div to your question definition:
+For each question defined in a test, you can specify a hint text, which will be shown after the user validated his answer. Just add a `.infos` div to your question definition:
 
 ```html
 <div class="question">
