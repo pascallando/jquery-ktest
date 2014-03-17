@@ -33,16 +33,16 @@
 				'correct_answer': "correct answer",
 				'you_made': "you made",
 				'mistake': "mistake",
-				'test_is_finished' : "the test is finished, you did it in",
+				'test_is_finished' : "this test is finished, you did it in",
 				'less_than_a': "less than a",
 				'you_correctly_answered': "you correctly answered",
 				'on': "on",
 				'something_like': "something like",
 				'review_all': "review all questions",
 
-				'html_failed_comment' : "<p><strong>You failed this test.</strong></p><p>But don't worry, reading our advices should allow you to make visible progress.</p><p>Good luck !</p>",
-				'html_can_do_better_comment' : "<p><strong>You are average on this test.</strong></p><p>Reading our advices should allow you to make visible progress.</p><p>Good luck !</p>",
-				'html_good_job_comment' : "<p><strong>Goo job on this test!</strong></p><p>Feel free to try ou our other tests.</p>",
+				'html_failed_comment' : "<p><strong>You failed this test.</strong></p><p>But don't worry, reading our advices should allow you to make significant progress.</p><p>Good luck !</p>",
+				'html_can_do_better_comment' : "<p><strong>You are average on this test.</strong></p><p>Reading our advices should allow you to make get better.</p><p>Good luck !</p>",
+				'html_good_job_comment' : "<p><strong>Good job on this test!</strong></p><p>Feel free to try out our other tests.</p>",
 			}
 
 		if (typeof $.fn.ktest.labels != 'undefined') {
