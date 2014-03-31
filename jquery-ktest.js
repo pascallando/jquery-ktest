@@ -1,4 +1,8 @@
-(function($) {
+/*!
+ * jquery-ktest v1.3
+ */
+
+ (function($) {
 	"use strict";
 
 	/**
