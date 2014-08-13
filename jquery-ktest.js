@@ -1,6 +1,6 @@
 /*!
  * jquery-ktest v1.3
- * Pascal Lando, 2014
+ * Pascal Lando, 2013-2014
  */
 
  (function($) {
